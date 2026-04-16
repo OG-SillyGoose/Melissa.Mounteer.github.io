@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nail Color Match ✦</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===================== VARIABLES ===================== */
+        :root {
+            --pink-light: #fde8ef;
+            --pink-mid: #f7c5d5;
+            --pink-deep: #e8829a;
+            --pink-accent: #d4587a;
+            --cream: #fdf6f0;
+            --brown-text: #5a3040;
+            --soft-gray: #f0e8ec;
+            --white: #ffffff;
+        }
+
+        /* ===================== RESET ===================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ===================== GLITTER CANVAS ===================== */
+        #glitter-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===================== BODY ===================== */
+        body {
+            background: linear-gradient(135deg, #fde8ef 0%, #fdf6f0 50%, #fce4ee 100%);
+            font-family: 'Nunito', sans-serif;
+            color: var(--brown-text);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* ===================== NAVBAR ===================== */
+        #navbar {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--pink-mid);
+            padding: 16px 40px;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        #navbar a {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
+            color: var(--pink-accent);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.2s ease;
+        }
+
+        #navbar a:hover { color: var(--brown-text); }
+
+        /* ===================== MAIN WRAPPER ===================== */
+        #app {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 30px 80px;
+        }
+
+        /* ===================== HEADER ===================== */
+        #header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeDown 0.8s ease both;
+        }
+
+        .header-sparkle {
+            font-size: 13px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--pink-deep);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        #header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 58px;
+            color: var(--brown-text);
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        #header h1 span {
+            color: var(--pink-accent);
+            font-style: italic;
+        }
+
+        #header p {
+            color: #8a6070;
+            font-size: 17px;
+            font-weight: 300;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* ===================== MOOD SECTION ===================== */
+        #mood-section {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            border: 2px solid var(--pink-mid);
+            padding: 40px;
+            margin-bottom: 40px;
+            animation: fadeUp 0.8s 0.2s ease both;
+        }
+
+        #mood-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: var(--brown-text);
+            margin-bottom: 8px;
+        }
+
+        #mood-section p {
+            color: #8a6070;
+            font-size: 15px;
+            font-weight: 300;
+            margin-bottom: 28px;
+        }
+
+        #mood-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .mood-btn {
+            background: var(--white);
+            border: 2px solid var(--pink-mid);
+            color: var(--brown-text);
+            padding: 12px 22px;
+            border-radius: 50px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mood-btn:hover {
+            background: var(--pink-light);
+            border-color: var(--pink-deep);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212,88,122,0.15);
+        }
+
+        .mood-btn.active {
+            background: var(--pink-accent);
+            border-color: var(--pink-accent);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212,88,122,0.35);
+        }
+
+        /* ===================== RESULTS ===================== */
+        #result {
+            display: none;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        #result.visible { display: block; }
+
+        /* Palette name banner */
+        #palette-banner {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        #palette-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            color: var(--brown-text);
+            margin-bottom: 6px;
+        }
+
+        #palette-tagline {
+            font-size: 16px;
+            color: #8a6070;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        /* ===================== NAIL MOCKUP ===================== */
+        #nail-display {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            border: 2px solid var(--pink-mid);
+            padding: 40px;
+            margin-bottom: 28px;
+            text-align: center;
+        }
+
+        #nail-display h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: var(--brown-text);
+            margin-bottom: 30px;
+        }
+
+        #nails-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nail-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nail {
+            border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15), inset 0 2px 6px rgba(255,255,255,0.4);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        /* Nail sizes for each finger */
+        .nail-thumb  { width: 52px; height: 62px; }
+        .nail-index  { width: 44px; height: 68px; }
+        .nail-middle { width: 46px; height: 72px; }
+        .nail-ring   { width: 42px; height: 66px; }
+        .nail-pinky  { width: 36px; height: 56px; }
+
+        /* Nail shine overlay */
+        .nail::after {
+            content: '';
+            position: absolute;
+            top: 8px; left: 8px;
+            width: 35%; height: 40%;
+            background: rgba(255,255,255,0.35);
+            border-radius: 50%;
+            filter: blur(3px);
+        }
+
+        /* Glitter overlay on nail */
+        .nail-glitter {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px),
+                radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px);
+            background-size: 8px 8px, 13px 13px;
+            background-position: 0 0, 4px 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nail-glitter.show { opacity: 0.4; }
+
+        /* Art overlay patterns */
+        .nail-art {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+        }
+
+        .finger-label {
+            font-size: 11px;
+            color: #8a6070;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        /* ===================== COLOR PALETTE ===================== */
+        #palette-section {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            border: 2px solid var(--pink-mid);
+            padding: 40px;
+            margin-bottom: 28px;
+        }
+
+        #palette-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: var(--brown-text);
+            margin-bottom: 24px;
+        }
+
+        #swatches {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .swatch-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .swatch {
+            width: 100%;
+            height: 80px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .swatch:hover { transform: scale(1.05); }
+
+        .swatch-glitter {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px);
+            background-size: 6px 6px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .swatch-glitter.show { opacity: 0.3; }
+
+        .swatch-info {
+            text-align: center;
+        }
+
+        .swatch-role {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--pink-deep);
+            margin-bottom: 4px;
+        }
+
+        .swatch-color-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 15px;
+            color: var(--brown-text);
+            margin-bottom: 3px;
+        }
+
+        .swatch-hex {
+            font-size: 12px;
+            color: #8a6070;
+            font-weight: 600;
+            font-family: monospace;
+            cursor: pointer;
+            padding: 3px 8px;
+            background: var(--pink-light);
+            border-radius: 20px;
+            transition: background 0.2s;
+        }
+
+        .swatch-hex:hover { background: var(--pink-mid); }
+
+        .copied-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--brown-text);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        .copied-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ===================== TIPS SECTION ===================== */
+        #tips-section {
+            background: linear-gradient(135deg, var(--pink-light) 0%, #fff0f5 100%);
+            border-radius: 28px;
+            border: 2px solid var(--pink-mid);
+            padding: 40px;
+            margin-bottom: 28px;
+        }
+
+        #tips-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: var(--brown-text);
+            margin-bottom: 20px;
+        }
+
+        #tips-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        #tips-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 15px;
+            color: #6a4050;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .tip-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* ===================== TRY AGAIN BUTTON ===================== */
+        #try-again {
+            display: block;
+            margin: 0 auto;
+            background: var(--pink-accent);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            letter-spacing: 0.05em;
+        }
+
+        #try-again:hover {
+            background: var(--brown-text);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(90,48,64,0.25);
+        }
+
+        /* ===================== FOOTER ===================== */
+        #footer {
+            text-align: center;
+            padding: 20px;
+            color: #8a6070;
+            font-size: 14px;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===================== ANIMATIONS ===================== */
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shimmer {
+            0%   { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* ===================== RESPONSIVE ===================== */
+        @media (max-width: 600px) {
+            #header h1 { font-size: 40px; }
+            #nails-container { gap: 6px; }
+            .nail-middle { width: 38px; height: 60px; }
+            .nail-index, .nail-ring { width: 35px; height: 55px; }
+            .nail-thumb { width: 42px; height: 50px; }
+            .nail-pinky { width: 28px; height: 44px; }
+            #swatches { gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Glitter canvas -->
+<canvas id="glitter-canvas"></canvas>
+
+<!-- Navbar -->
+<div id="navbar">
+    <a href="Scratch.html">⟵ Back to My Scratch Page</a>
+</div>
+
+<!-- App -->
+<div id="app">
+
+    <!-- Header -->
+    <div id="header">
+        <p class="header-sparkle">✦ a nail tech's little helper ✦</p>
+        <h1>Nail Color <span>Match</span></h1>
+        <p>Tell me your mood and I'll find your perfect nail palette — complete with a custom art suggestion just for you.</p>
+    </div>
+
+    <!-- Mood Picker -->
+    <div id="mood-section">
+        <h2>How are you feeling today?</h2>
+        <p>Pick a mood and let the magic happen ✨</p>
+        <div id="mood-buttons">
+            <button class="mood-btn" data-mood="romantic">🌹 Romantic</button>
+            <button class="mood-btn" data-mood="bold">🔥 Bold</button>
+            <button class="mood-btn" data-mood="cozy">🍂 Cozy</button>
+            <button class="mood-btn" data-mood="fresh">🌿 Fresh</button>
+            <button class="mood-btn" data-mood="dreamy">🌙 Dreamy</button>
+            <button class="mood-btn" data-mood="festive">🎉 Festive</button>
+            <button class="mood-btn" data-mood="elegant">✨ Elegant</button>
+            <button class="mood-btn" data-mood="playful">🎀 Playful</button>
+            <button class="mood-btn" data-mood="mysterious">🖤 Mysterious</button>
+            <button class="mood-btn" data-mood="sunny">☀️ Sunny</button>
+            <button class="mood-btn" data-mood="coastal">🌊 Coastal</button>
+            <button class="mood-btn" data-mood="cottagecore">🌸 Cottagecore</button>
+        </div>
+    </div>
+
+    <!-- Result (hidden until mood selected) -->
+    <div id="result">
+
+        <div id="palette-banner">
+            <div id="palette-name"></div>
+            <div id="palette-tagline"></div>
+        </div>
+
+        <!-- Nail Mockup -->
+        <div id="nail-display">
+            <h3>Your Nail Mockup ✦</h3>
+            <div id="nails-container">
+                <div class="nail-wrapper">
+                    <div class="nail nail-thumb" id="nail-0"><div class="nail-glitter" id="glitter-0"></div><canvas class="nail-art" id="art-0"></canvas></div>
+                    <span class="finger-label">Thumb</span>
+                </div>
+                <div class="nail-wrapper">
+                    <div class="nail nail-index" id="nail-1"><div class="nail-glitter" id="glitter-1"></div><canvas class="nail-art" id="art-1"></canvas></div>
+                    <span class="finger-label">Index</span>
+                </div>
+                <div class="nail-wrapper">
+                    <div class="nail nail-middle" id="nail-2"><div class="nail-glitter" id="glitter-2"></div><canvas class="nail-art" id="art-2"></canvas></div>
+                    <span class="finger-label">Middle</span>
+                </div>
+                <div class="nail-wrapper">
+                    <div class="nail nail-ring" id="nail-3"><div class="nail-glitter" id="glitter-3"></div><canvas class="nail-art" id="art-3"></canvas></div>
+                    <span class="finger-label">Ring</span>
+                </div>
+                <div class="nail-wrapper">
+                    <div class="nail nail-pinky" id="nail-4"><div class="nail-glitter" id="glitter-4"></div><canvas class="nail-art" id="art-4"></canvas></div>
+                    <span class="finger-label">Pinky</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Color Palette -->
+        <div id="palette-section">
+            <h3>Your Color Palette 🎨</h3>
+            <div id="swatches"></div>
+            <p style="font-size:13px;color:#8a6070;font-style:italic;">Click any hex code to copy it ✦</p>
+        </div>
+
+        <!-- Tips -->
+        <div id="tips-section">
+            <h3>Nail Art Style Tips ✦</h3>
+            <ul id="tips-list"></ul>
+        </div>
+
+        <button id="try-again">✦ Try Another Mood</button>
+    </div>
+
+</div>
+
+<div id="footer">Made with love & glitter by Melissa ✦</div>
+<div class="copied-toast" id="toast">Hex code copied! ✦</div>
+
+<script>
+// ===================== PALETTE DATA =====================
+const palettes = {
+    romantic: {
+        name: "Rose Petal Reverie",
+        tagline: "Soft, dreamy, and utterly in love with yourself.",
+        colors: [
+            { role: "Base", name: "Blush Whisper", hex: "#F2B5C8" },
+            { role: "Accent", name: "Deep Rose", hex: "#C2526E" },
+            { role: "Detail", name: "Champagne Kiss", hex: "#F5DEB3" },
+            { role: "Highlight", name: "Petal Cream", hex: "#FDF0F3" },
+            { role: "Glam", name: "Gold Dust", hex: "#E8C87A" }
+        ],
+        nailDesign: ["base", "accent", "base", "art-hearts", "base"],
+        glitter: true,
+        tips: [
+            { icon: "🌹", text: "Apply a sheer blush base coat and let dry completely before adding details." },
+            { icon: "💕", text: "Use a fine nail art brush to paint tiny hearts on the ring finger with Deep Rose." },
+            { icon: "✨", text: "Dab Gold Dust glitter polish on the tips for a romantic gradient effect." },
+            { icon: "💎", text: "Add a small rhinestone at the base of the ring nail for extra romance." },
+            { icon: "🌸", text: "Seal everything with a high-gloss top coat to make the colors pop." }
+        ]
+    },
+    bold: {
+        name: "Main Character Energy",
+        tagline: "Walk into every room like you own it.",
+        colors: [
+            { role: "Base", name: "Crimson Power", hex: "#C0392B" },
+            { role: "Accent", name: "Jet Black", hex: "#1C1C1E" },
+            { role: "Detail", name: "Chrome Silver", hex: "#C0C0C0" },
+            { role: "Highlight", name: "Deep Burgundy", hex: "#7B2D42" },
+            { role: "Glam", name: "Gold Strike", hex: "#D4AF37" }
+        ],
+        nailDesign: ["base", "accent", "base", "art-flames", "base"],
+        glitter: false,
+        tips: [
+            { icon: "🔥", text: "Apply two thin coats of Crimson Power for full, even coverage." },
+            { icon: "⚡", text: "Use nail tape to create a sharp diagonal accent on the index finger with Jet Black." },
+            { icon: "✨", text: "Add Chrome Silver foil to the pinky for an edgy metallic contrast." },
+            { icon: "💪", text: "Try a bold stiletto or coffin shape to amplify the fierce energy." },
+            { icon: "🖤", text: "Finish with a gel top coat for a glossy, long-lasting bold look." }
+        ]
+    },
+    cozy: {
+        name: "Autumn Sweater Weather",
+        tagline: "Warm, comforting, like your favorite hoodie.",
+        colors: [
+            { role: "Base", name: "Pumpkin Spice", hex: "#C47A3A" },
+            { role: "Accent", name: "Burnt Sienna", hex: "#8B4513" },
+            { role: "Detail", name: "Cream Latte", hex: "#F5E6C8" },
+            { role: "Highlight", name: "Maple Sugar", hex: "#DEB887" },
+            { role: "Glam", name: "Copper Shimmer", hex: "#B87333" }
+        ],
+        nailDesign: ["base", "accent", "base", "art-leaves", "base"],
+        glitter: false,
+        tips: [
+            { icon: "🍂", text: "Use Pumpkin Spice as your base — two coats for that rich, warm tone." },
+            { icon: "🍁", text: "Stamp tiny leaf patterns on the ring finger using Burnt Sienna." },
+            { icon: "☕", text: "A matte top coat on the base nails gives a cozy, soft finish." },
+            { icon: "✨", text: "Add a subtle Copper Shimmer accent to the tips for warmth." },
+            { icon: "🧣", text: "Try a subtle plaid or houndstooth design on the accent nail for extra coziness." }
+        ]
+    },
+    fresh: {
+        name: "Garden in Bloom",
+        tagline: "Clean, alive, and full of possibility.",
+        colors: [
+            { role: "Base", name: "Mint Breeze", hex: "#A8D8B9" },
+            { role: "Accent", name: "Sage Whisper", hex: "#7B9E87" },
+            { role: "Detail", name: "White Daisy", hex: "#F8F8FF" },
+            { role: "Highlight", name: "Seafoam", hex: "#C8E6C9" },
+            { role: "Glam", name: "Dewdrop Pearl", hex: "#E8F5E9" }
+        ],
+        nailDesign: ["base", "accent", "base", "art-flowers", "base"],
+        glitter: false,
+        tips: [
+            { icon: "🌿", text: "Apply Mint Breeze base coat for a refreshing, clean start." },
+            { icon: "🌼", text: "Use a dotting tool and White Daisy to create simple floral dots on the ring nail." },
+            { icon: "🍃", text: "Add thin Sage Whisper leaves around the flowers with a liner brush." },
+            { icon: "💧", text: "A glossy top coat will give the nails a fresh, dewy finish." },
+            { icon: "🌸", text: "Try negative space designs — leave small unpainted areas for an airy, modern look." }
+        ]
+    },
+    dreamy: {
+        name: "Stardust Serenade",
+        tagline: "Soft galaxies and moonlit wishes.",
+        colors: [
+            { role: "Base", name: "Lavender Mist", hex: "#C9B8E8" },
+            { role: "Accent", name: "Periwinkle", hex: "#8E9FC5" },
+            { role: "Detail", name: "Moonbeam", hex: "#E8E0F0" },
+            { role: "Highlight", name: "Lilac Dream", hex: "#DDA0DD" },
+            { role: "Glam", name: "Stardust Silver", hex: "#D8D8E8" }
+        ],
+        nailDesign: ["base", "accent", "base", "art-stars", "base"],
+        glitter: true,
+        tips: [
+            { icon: "🌙", text: "Blend Lavender Mist and Periwinkle together while wet for a dreamy gradient." },
+            { icon: "⭐", text: "Use a fine brush to paint tiny stars and moons on the ring nail." },
+            { icon: "✨", text: "Stardust Silver glitter on the tips creates a magical, celestial effect." },
+            { icon: "💜", text: "Apply a holographic top coat to make the whole set shimmer like the night sky." },
+            { icon: "🌌", text: "Try a galaxy sponge technique — dab multiple colors on a sponge and press lightly." }
+        ]
+    },
+    festive: {
+        name: "Confetti & Champagne",
+        tagline: "Because every day deserves a celebration.",
+        colors: [
+            { role: "Base", name: "Champagne Fizz", hex: "#F0D060" },
+            { role: "Accent", name: "Poppy Red", hex: "#E8365D" },
+            { role: "Detail", name: "Electric Blue", hex: "#4A90D9" },
+            { role: "Highlight", name: "Lime Twist", hex: "#A8D840" },
+            { role: "Glam", name: "Gold Confetti", hex: "#FFD700" }
+        ],
+        nailDesign: ["base", "accent", "base", "art-confetti", "base"],
+        glitter: true,
+        tips: [
+            { icon: "🎉", text: "Paint each nail a different color from the palette for a fun, mismatched look." },
+            { icon: "🎊", text: "Add tiny confetti dots using a dotting tool in all four colors on the ring nail." },
+            { icon: "✨", text: "Gold Confetti glitter on the tips ties all the colors together beautifully." },
+            { icon: "🥂", text: "Try a jelly finish — one thin coat over the base for a translucent, fun effect." },
+            { icon: "🌈", text: "Mix and match nail shapes — square on some, rounded on others for extra personality." }
+        ]
+    },
+    elegant: {
+        name: "Silk & Pearls",
+        tagline: "Understated, refined, and effortlessly gorgeous.",
+        colors: [
+            { role: "Base", name: "Ivory Silk", hex: "#FAF0E6" },
+            { role: "Accent", name: "Champagne Nude", hex: "#E8D5B7" },
+            { role: "Detail", name: "Pearl White", hex: "#F8F8F0" },
+            { role: "Highlight", name: "Rose Gold", hex: "#E8A898" },
+            { role: "Glam", name: "Platinum Dust", hex: "#D8D8D8" }
+        ],
+        nailDesign: ["base", "accent", "base", "art-french", "base"],
+        glitter: false,
+        tips: [
+            { icon: "✨", text: "Keep nails in an almond or oval shape for maximum elegance." },
+            { icon: "💅", text: "A classic French tip with Pearl White on Ivory Silk base is timeless perfection." },
+            { icon: "💎", text: "Add a single small pearl or crystal at the base of the ring nail." },
+            { icon: "🌸", text: "Rose Gold on the tips gives a modern, sophisticated twist to the French manicure." },
+            { icon: "💍", text: "Seal with a gel top coat for a smooth, salon-quality finish that lasts." }
+        ]
+    },
+    playful: {
+        name: "Sugar Rush",
+        tagline: "Sweet, fun, and impossible not to smile at.",
+        colors: [
+            { role: "Base", name: "Bubblegum Pink", hex: "#FF85A1" },
+            { role: "Accent", name: "Sky Blue", hex: "#87CEEB" },
+            { role: "Detail", name: "Sunshine Yellow", hex: "#FFE44D" },
+            { role: "Highlight", name: "Lilac Pop", hex: "#D8A0E8" },
+            { role: "Glam", name: "Rainbow Glitter", hex: "#FFB6C1" }
+        ],
+        nailDesign: ["base", "accent", "base", "art-rainbow", "base"],
+        glitter: true,
+        tips: [
+            { icon: "🎀", text: "Paint each nail a different pastel color for a fun, candy-coated look." },
+            { icon: "🌈", text: "Draw a tiny rainbow on the ring nail using all the palette colors." },
+            { icon: "⭐", text: "Add star stickers or stamping to the accent nails for extra cuteness." },
+            { icon: "🍭", text: "Try a lollipop swirl design — twist two colors together on a nail." },
+            { icon: "💖", text: "Rainbow Glitter on every tip brings all the colors together in the most fun way." }
+        ]
+    },
+    mysterious: {
+        name: "Midnight Velvet",
+        tagline: "Dark, alluring, with secrets in every shadow.",
+        colors: [
+            { role: "Base", name: "Onyx Night", hex: "#1A1A2E" },
+            { role: "Accent", name: "Deep Plum", hex: "#6B2D5E" },
+            { role: "Detail", name: "Midnight Blue", hex: "#16213E" },
+            { role: "Highlight", name: "Amethyst", hex: "#9B59B6" },
+            { role: "Glam", name: "Black Diamond", hex: "#2C2C54" }
+        ],
+        nailDesign: ["base", "accent", "base", "art-moon", "base"],
+        glitter: false,
+        tips: [
+            { icon: "🖤", text: "Apply two coats of Onyx Night for a deep, flawless base." },
+            { icon: "🌙", text: "Paint a crescent moon design on the ring nail using Amethyst." },
+            { icon: "💜", text: "Add Deep Plum as a smoky gradient on the tips for a sultry ombre effect." },
+            { icon: "✨", text: "A chrome or mirror powder over the accent nail creates a dramatic effect." },
+            { icon: "🔮", text: "Try a velvet matte top coat for a luxurious, mysterious finish." }
+        ]
+    },
+    sunny: {
+        name: "Golden Hour",
+        tagline: "Warm sunshine, good vibes, and vitamin D energy.",
+        colors: [
+            { role: "Base", name: "Sunflower Gold", hex: "#FFD700" },
+            { role: "Accent", name: "Coral Sunset", hex: "#FF7B54" },
+            { role: "Detail", name: "Creamy Peach", hex: "#FFDAB9" },
+            { role: "Highlight", name: "Lemon Zest", hex: "#FFF44F" },
+            { role: "Glam", name: "Golden Glow", hex: "#FFC300" }
+        ],
+        nailDesign: ["base", "accent", "base", "art-sun", "base"],
+        glitter: true,
+        tips: [
+            { icon: "☀️", text: "Apply Sunflower Gold base for that instant summer glow." },
+            { icon: "🌅", text: "Create a sunset ombre blending Coral Sunset into Lemon Zest." },
+            { icon: "🌻", text: "Paint a tiny sunflower on the ring nail using Sunflower Gold and a brown center." },
+            { icon: "✨", text: "Golden Glow glitter on the tips captures the actual golden hour light." },
+            { icon: "🍋", text: "Try cheerful fruit nail art — tiny lemons or oranges are perfect for this palette." }
+        ]
+    },
+    coastal: {
+        name: "Saltwater & Seaglass",
+        tagline: "Fresh ocean breeze, bare feet, and endless blue.",
+        colors: [
+            { role: "Base", name: "Ocean Foam", hex: "#B2EBF2" },
+            { role: "Accent", name: "Deep Sea", hex: "#006994" },
+            { role: "Detail", name: "Sandy Shore", hex: "#F4D03F" },
+            { role: "Highlight", name: "Seafoam Mist", hex: "#E0F7FA" },
+            { role: "Glam", name: "Pearl Shell", hex: "#F0EAD6" }
+        ],
+        nailDesign: ["base", "accent", "base", "art-waves", "base"],
+        glitter: false,
+        tips: [
+            { icon: "🌊", text: "Apply Ocean Foam base for a breezy, light foundation." },
+            { icon: "🐚", text: "Paint delicate wave lines on the ring nail using Deep Sea and a liner brush." },
+            { icon: "⭐", text: "Add tiny starfish or seashell details with Sandy Shore polish." },
+            { icon: "💎", text: "A pearl finish top coat gives the set an iridescent, seaglass quality." },
+            { icon: "🏖️", text: "Try a watercolor wash technique — dilute polish slightly for a soft, beachy look." }
+        ]
+    },
+    cottagecore: {
+        name: "Wildflower Meadow",
+        tagline: "Sun-dappled forests, pressed flowers, and pure magic.",
+        colors: [
+            { role: "Base", name: "Dusty Rose", hex: "#DCAE96" },
+            { role: "Accent", name: "Sage Green", hex: "#87A878" },
+            { role: "Detail", name: "Buttercup", hex: "#FFF176" },
+            { role: "Highlight", name: "Lavender Field", hex: "#C5A3C8" },
+            { role: "Glam", name: "Wildflower White", hex: "#FAF7F0" }
+        ],
+        nailDesign: ["base", "accent", "base", "art-flowers", "base"],
+        glitter: false,
+        tips: [
+            { icon: "🌸", text: "Apply Dusty Rose base for that vintage, earthy cottagecore feel." },
+            { icon: "🌿", text: "Use Sage Green to paint delicate botanical leaves and stems." },
+            { icon: "🌼", text: "Add tiny wildflowers — daisies, forget-me-nots, or chamomile in Buttercup and white." },
+            { icon: "🍄", text: "Try a pressed flower technique using real dried flowers under gel top coat." },
+            { icon: "✨", text: "A soft matte finish gives the whole set that dreamy, sun-faded aesthetic." }
+        ]
+    }
+};
+
+// ===================== NAIL ART DRAWING =====================
+function drawNailArt(canvasId, type, colors, nailEl) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const nail = nailEl;
+    canvas.width = nail.offsetWidth || 46;
+    canvas.height = nail.offsetHeight || 68;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const w = canvas.width, h = canvas.height;
+
+    if (type === 'base') {
+        // Solid base color
+        ctx.fillStyle = colors[0];
+        ctx.fillRect(0, 0, w, h);
+    } else if (type === 'accent') {
+        // Accent color
+        ctx.fillStyle = colors[1];
+        ctx.fillRect(0, 0, w, h);
+    } else if (type === 'art-hearts') {
+        ctx.fillStyle = colors[0];
+        ctx.fillRect(0, 0, w, h);
+        // Draw hearts
+        ctx.fillStyle = colors[1];
+        drawHeart(ctx, w/2, h/2 - 5, 8);
+        ctx.fillStyle = 'rgba(255,255,255,0.6)';
+        drawHeart(ctx, w/3, h*0.7, 5);
+    } else if (type === 'art-flowers') {
+        ctx.fillStyle = colors[0];
+        ctx.fillRect(0, 0, w, h);
+        drawFlower(ctx, w/2, h/2, 7, colors[2], colors[3]);
+        drawFlower(ctx, w*0.25, h*0.75, 4, colors[2], 'white');
+    } else if (type === 'art-stars') {
+        ctx.fillStyle = colors[0];
+        ctx.fillRect(0, 0, w, h);
+        // Stars
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        drawStar(ctx, w/2, h/2 - 5, 7, 4);
+        ctx.fillStyle = 'rgba(255,255,255,0.6)';
+        drawStar(ctx, w*0.25, h*0.7, 4, 2);
+        drawStar(ctx, w*0.75, h*0.65, 3, 1.5);
+        // Moon
+        ctx.fillStyle = colors[4];
+        ctx.beginPath();
+        ctx.arc(w*0.7, h*0.3, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = colors[0];
+        ctx.beginPath();
+        ctx.arc(w*0.7 + 3, h*0.3 - 2, 4, 0, Math.PI * 2);
+        ctx.fill();
+    } else if (type === 'art-french') {
+        ctx.fillStyle = colors[0];
+        ctx.fillRect(0, 0, w, h);
+        // French tip
+        ctx.fillStyle = colors[2];
+        ctx.beginPath();
+        ctx.ellipse(w/2, h*0.12, w/2, h*0.16, 0, 0, Math.PI * 2);
+        ctx.fill();
+        // Rose gold line
+        ctx.strokeStyle = colors[3];
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.ellipse(w/2, h*0.24, w/2 - 2, h*0.08, 0, 0, Math.PI);
+        ctx.stroke();
+    } else if (type === 'art-flames') {
+        ctx.fillStyle = colors[0];
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = colors[1];
+        drawFlame(ctx, w/2, h, w*0.4, h*0.5);
+        ctx.fillStyle = colors[2];
+        drawFlame(ctx, w/2, h, w*0.2, h*0.3);
+    } else if (type === 'art-leaves') {
+        ctx.fillStyle = colors[0];
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = colors[1];
+        drawLeaf(ctx, w/2, h/2, 12, -0.3);
+        ctx.fillStyle = colors[2];
+        drawLeaf(ctx, w*0.3, h*0.6, 8, 0.5);
+    } else if (type === 'art-confetti') {
+        ctx.fillStyle = colors[0];
+        ctx.fillRect(0, 0, w, h);
+        const dots = [[w*0.2,h*0.3,colors[1]], [w*0.7,h*0.4,colors[2]], [w*0.5,h*0.6,colors[3]], [w*0.3,h*0.7,colors[4]], [w*0.8,h*0.65,colors[1]]];
+        dots.forEach(([x,y,c]) => {
+            ctx.fillStyle = c;
+            ctx.beginPath();
+            ctx.ellipse(x, y, 4, 2, Math.random()*Math.PI, 0, Math.PI*2);
+            ctx.fill();
+        });
+    } else if (type === 'art-moon') {
+        ctx.fillStyle = colors[0];
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = colors[3];
+        ctx.beginPath();
+        ctx.arc(w/2, h/2 - 5, 10, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = colors[0];
+        ctx.beginPath();
+        ctx.arc(w/2 + 6, h/2 - 8, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'rgba(255,255,255,0.8)';
+        for (let i = 0; i < 4; i++) {
+            ctx.beginPath();
+            ctx.arc(w*Math.random(), h*0.2 + h*0.6*Math.random(), 1.5, 0, Math.PI*2);
+            ctx.fill();
+        }
+    } else if (type === 'art-rainbow') {
+        ctx.fillStyle = colors[0];
+        ctx.fillRect(0, 0, w, h);
+        const rColors = [colors[1], colors[2], colors[3], colors[0]];
+        rColors.forEach((c, i) => {
+            ctx.strokeStyle = c;
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.arc(w/2, h*0.9, 6 + i*5, Math.PI, 0);
+            ctx.stroke();
+        });
+    } else if (type === 'art-waves') {
+        ctx.fillStyle = colors[0];
+        ctx.fillRect(0, 0, w, h);
+        for (let i = 0; i < 3; i++) {
+            ctx.strokeStyle = i === 0 ? colors[1] : 'rgba(255,255,255,0.5)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            const yBase = h * (0.4 + i * 0.18);
+            ctx.moveTo(0, yBase);
+            for (let x = 0; x <= w; x += 2) {
+                ctx.lineTo(x, yBase + Math.sin((x / w) * Math.PI * 2 + i) * 4);
+            }
+            ctx.stroke();
+        }
+    } else if (type === 'art-sun') {
+        ctx.fillStyle = colors[0];
+        ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = colors[1];
+        ctx.lineWidth = 1.5;
+        for (let i = 0; i < 8; i++) {
+            const angle = (i / 8) * Math.PI * 2;
+            ctx.beginPath();
+            ctx.moveTo(w/2 + Math.cos(angle)*5, h/2 + Math.sin(angle)*5);
+            ctx.lineTo(w/2 + Math.cos(angle)*11, h/2 + Math.sin(angle)*11);
+            ctx.stroke();
+        }
+        ctx.fillStyle = colors[2];
+        ctx.beginPath();
+        ctx.arc(w/2, h/2, 5, 0, Math.PI*2);
+        ctx.fill();
+    }
+}
+
+function drawHeart(ctx, x, y, size) {
+    ctx.beginPath();
+    ctx.moveTo(x, y + size * 0.3);
+    ctx.bezierCurveTo(x, y - size * 0.3, x - size, y - size * 0.3, x - size, y + size * 0.1);
+    ctx.bezierCurveTo(x - size, y + size * 0.6, x, y + size, x, y + size * 1.1);
+    ctx.bezierCurveTo(x, y + size, x + size, y + size * 0.6, x + size, y + size * 0.1);
+    ctx.bezierCurveTo(x + size, y - size * 0.3, x, y - size * 0.3, x, y + size * 0.3);
+    ctx.fill();
+}
+
+function drawFlower(ctx, x, y, r, petalColor, centerColor) {
+    ctx.fillStyle = petalColor;
+    for (let i = 0; i < 5; i++) {
+        const angle = (i / 5) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.ellipse(x + Math.cos(angle) * r, y + Math.sin(angle) * r, r * 0.7, r * 0.4, angle, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    ctx.fillStyle = centerColor;
+    ctx.beginPath();
+    ctx.arc(x, y, r * 0.45, 0, Math.PI * 2);
+    ctx.fill();
+}
+
+function drawStar(ctx, x, y, outer, inner) {
+    ctx.beginPath();
+    for (let i = 0; i < 5; i++) {
+        const outerAngle = (i * 2 * Math.PI / 5) - Math.PI / 2;
+        const innerAngle = outerAngle + Math.PI / 5;
+        if (i === 0) ctx.moveTo(x + outer * Math.cos(outerAngle), y + outer * Math.sin(outerAngle));
+        else ctx.lineTo(x + outer * Math.cos(outerAngle), y + outer * Math.sin(outerAngle));
+        ctx.lineTo(x + inner * Math.cos(innerAngle), y + inner * Math.sin(innerAngle));
+    }
+    ctx.closePath();
+    ctx.fill();
+}
+
+function drawFlame(ctx, x, baseY, w, h) {
+    ctx.beginPath();
+    ctx.moveTo(x - w/2, baseY);
+    ctx.quadraticCurveTo(x - w*0.8, baseY - h*0.5, x, baseY - h);
+    ctx.quadraticCurveTo(x + w*0.8, baseY - h*0.5, x + w/2, baseY);
+    ctx.closePath();
+    ctx.fill();
+}
+
+function drawLeaf(ctx, x, y, size, angle) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    ctx.beginPath();
+    ctx.moveTo(0, -size);
+    ctx.bezierCurveTo(size*0.8, -size*0.5, size*0.8, size*0.5, 0, size);
+    ctx.bezierCurveTo(-size*0.8, size*0.5, -size*0.8, -size*0.5, 0, -size);
+    ctx.fill();
+    ctx.restore();
+}
+
+// ===================== GLITTER CANVAS =====================
+const glitterCanvas = document.getElementById('glitter-canvas');
+const glitterCtx = glitterCanvas.getContext('2d');
+const particles = [];
+
+function resizeGlitter() {
+    glitterCanvas.width = window.innerWidth;
+    glitterCanvas.height = window.innerHeight;
+}
+resizeGlitter();
+window.addEventListener('resize', resizeGlitter);
+
+for (let i = 0; i < 60; i++) {
+    particles.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: Math.random() * 2 + 0.5,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: Math.random() * 0.3 + 0.1,
+        alpha: Math.random() * 0.6 + 0.2,
+        color: ['#FFB6C1','#FFC0CB','#FFD700','#E8C87A','#FADADD'][Math.floor(Math.random()*5)]
+    });
+}
+
+function animateGlitter() {
+    glitterCtx.clearRect(0, 0, glitterCanvas.width, glitterCanvas.height);
+    particles.forEach(p => {
+        glitterCtx.save();
+        glitterCtx.globalAlpha = p.alpha;
+        glitterCtx.fillStyle = p.color;
+        glitterCtx.beginPath();
+        glitterCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        glitterCtx.fill();
+        glitterCtx.restore();
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.y > glitterCanvas.height) { p.y = 0; p.x = Math.random() * glitterCanvas.width; }
+        if (p.x < 0 || p.x > glitterCanvas.width) p.vx *= -1;
+        p.alpha += (Math.random() - 0.5) * 0.03;
+        p.alpha = Math.max(0.1, Math.min(0.8, p.alpha));
+    });
+    requestAnimationFrame(animateGlitter);
+}
+animateGlitter();
+
+// ===================== APP LOGIC =====================
+let currentMood = null;
+
+document.querySelectorAll('.mood-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentMood = btn.dataset.mood;
+        showPalette(currentMood);
+    });
+});
+
+function showPalette(mood) {
+    const data = palettes[mood];
+    if (!data) return;
+
+    // Set palette name & tagline
+    document.getElementById('palette-name').textContent = data.name;
+    document.getElementById('palette-tagline').textContent = data.tagline;
+
+    // Render swatches
+    const swatchContainer = document.getElementById('swatches');
+    swatchContainer.innerHTML = '';
+    data.colors.forEach((color, i) => {
+        const item = document.createElement('div');
+        item.className = 'swatch-item';
+        item.innerHTML = `
+            <div class="swatch" style="background:${color.hex};" title="${color.name}">
+                <div class="swatch-glitter ${data.glitter ? 'show' : ''}"></div>
+            </div>
+            <div class="swatch-info">
+                <div class="swatch-role">${color.role}</div>
+                <div class="swatch-color-name">${color.name}</div>
+                <div class="swatch-hex" data-hex="${color.hex}">${color.hex}</div>
+            </div>
+        `;
+        swatchContainer.appendChild(item);
+    });
+
+    // Hex copy
+    swatchContainer.querySelectorAll('.swatch-hex').forEach(el => {
+        el.addEventListener('click', () => {
+            navigator.clipboard.writeText(el.dataset.hex).catch(() => {});
+            showToast();
+        });
+    });
+
+    // Render nails
+    const nailColors = data.colors.map(c => c.hex);
+    const designs = data.nailDesign;
+    setTimeout(() => {
+        for (let i = 0; i < 5; i++) {
+            const nailEl = document.getElementById(`nail-${i}`);
+            nailEl.style.background = nailColors[0];
+            // Show glitter
+            const glitterEl = document.getElementById(`glitter-${i}`);
+            if (data.glitter) glitterEl.classList.add('show');
+            else glitterEl.classList.remove('show');
+            // Draw art
+            drawNailArt(`art-${i}`, designs[i], nailColors, nailEl);
+        }
+    }, 50);
+
+    // Render tips
+    const tipsList = document.getElementById('tips-list');
+    tipsList.innerHTML = '';
+    data.tips.forEach(tip => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="tip-icon">${tip.icon}</span><span>${tip.text}</span>`;
+        tipsList.appendChild(li);
+    });
+
+    // Show result
+    const result = document.getElementById('result');
+    result.classList.add('visible');
+    result.style.animation = 'none';
+    result.offsetHeight; // reflow
+    result.style.animation = 'fadeUp 0.6s ease both';
+
+    // Scroll to result
+    setTimeout(() => result.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+function showToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+document.getElementById('try-again').addEventListener('click', () => {
+    document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('result').classList.remove('visible');
+    document.getElementById('mood-section').scrollIntoView({ behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

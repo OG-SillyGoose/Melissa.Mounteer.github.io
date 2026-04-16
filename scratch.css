@@ -1,0 +1,366 @@
+/* ===================== CSS VARIABLES ===================== */
+:root {
+    --pink-light:   #fde8ef;
+    --pink-mid:     #f7c5d5;
+    --pink-deep:    #e8829a;
+    --pink-accent:  #d4587a;
+    --cream:        #fdf6f0;
+    --brown-text:   #5a3040;
+    --soft-gray:    #f0e8ec;
+    --white:        #ffffff;
+}
+
+/* ===================== RESET & BASE ===================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--cream);
+    font-family: 'Nunito', sans-serif;
+    color: var(--brown-text);
+    line-height: 1.7;
+}
+
+/* ===================== NAVBAR ===================== */
+#navbar {
+    background-color: var(--white);
+    border-bottom: 2px solid var(--pink-mid);
+    padding: 16px 40px;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+#navbar a {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    color: var(--pink-accent);
+    text-decoration: none;
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    transition: color 0.2s ease;
+}
+
+#navbar a:hover {
+    color: var(--brown-text);
+}
+
+/* ===================== HERO ===================== */
+#top {
+    background: linear-gradient(135deg, #fde8ef 0%, #fdf0f5 50%, #fde8ef 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+#top::before {
+    content: "✦  ✦  ✦  ✦  ✦  ✦  ✦  ✦  ✦  ✦  ✦  ✦";
+    position: absolute;
+    top: 30px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: var(--pink-mid);
+    font-size: 18px;
+    letter-spacing: 10px;
+}
+
+#top::after {
+    content: "✦  ✦  ✦  ✦  ✦  ✦  ✦  ✦  ✦  ✦  ✦  ✦";
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: var(--pink-mid);
+    font-size: 18px;
+    letter-spacing: 10px;
+}
+
+#hero-content {
+    max-width: 700px;
+}
+
+.subtitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--pink-deep);
+    font-size: 18px;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+}
+
+#top h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 72px;
+    font-weight: 700;
+    color: var(--brown-text);
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+.hero-desc {
+    font-size: 18px;
+    color: var(--pink-accent);
+    margin-bottom: 40px;
+    font-weight: 300;
+}
+
+#jump-links {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.jump-btn {
+    background-color: var(--white);
+    color: var(--pink-accent);
+    border: 2px solid var(--pink-mid);
+    padding: 12px 28px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+}
+
+.jump-btn:hover {
+    background-color: var(--pink-accent);
+    color: var(--white);
+    border-color: var(--pink-accent);
+}
+
+/* ===================== SHARED SECTION STYLES ===================== */
+.section-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 80px 40px;
+}
+
+.section-label {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--pink-deep);
+    margin-bottom: 10px;
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    color: var(--brown-text);
+    margin-bottom: 20px;
+}
+
+.section-desc {
+    font-size: 17px;
+    color: #8a6070;
+    max-width: 650px;
+    margin-bottom: 50px;
+    font-weight: 300;
+}
+
+/* ===================== NAIL ART SECTION ===================== */
+#nails {
+    background-color: var(--white);
+}
+
+#gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 60px;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 12px 30px rgba(212, 88, 122, 0.2);
+}
+
+#nail-list {
+    background-color: var(--pink-light);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 600px;
+}
+
+#nail-list h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: var(--brown-text);
+    margin-bottom: 20px;
+}
+
+#nail-list ol {
+    padding-left: 20px;
+    font-size: 16px;
+    color: var(--brown-text);
+}
+
+#nail-list ul {
+    padding-left: 20px;
+    margin: 8px 0 12px 0;
+    color: #8a6070;
+}
+
+#nail-list li {
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+#nail-list ul li {
+    font-weight: 300;
+}
+
+/* ===================== GAMES SECTION ===================== */
+#games {
+    background-color: var(--soft-gray);
+}
+
+#game-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 60px;
+}
+
+.game-card {
+    background-color: var(--white);
+    border-radius: 20px;
+    padding: 30px;
+    border: 2px solid var(--pink-mid);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+.game-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(212, 88, 122, 0.15);
+}
+
+.game-card.featured {
+    border-color: var(--pink-accent);
+    background: linear-gradient(135deg, #fff 0%, #fde8ef 100%);
+    grid-column: span 2;
+}
+
+.game-tag {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pink-accent);
+    margin-bottom: 10px;
+}
+
+.game-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: var(--brown-text);
+    margin-bottom: 12px;
+}
+
+.game-card p {
+    font-size: 15px;
+    color: #8a6070;
+    font-weight: 300;
+    line-height: 1.7;
+}
+
+/* ===================== VIDEO SECTION ===================== */
+#video-section {
+    text-align: center;
+}
+
+#video-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: var(--brown-text);
+    margin-bottom: 10px;
+}
+
+#video-section p {
+    color: #8a6070;
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+
+#video-wrapper {
+    display: inline-block;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 16px 40px rgba(212, 88, 122, 0.2);
+    max-width: 100%;
+}
+
+#video-wrapper iframe {
+    display: block;
+    max-width: 100%;
+}
+
+/* ===================== TABLEAU SECTION ===================== */
+#tableau-section {
+    background-color: var(--white);
+}
+
+#tableau-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+/* ===================== FOOTER ===================== */
+#footer {
+    background-color: var(--pink-light);
+    border-top: 2px solid var(--pink-mid);
+    text-align: center;
+    padding: 40px;
+    font-size: 15px;
+    color: #8a6070;
+}
+
+.back-top {
+    display: inline-block;
+    color: var(--pink-accent);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 16px;
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+    transition: color 0.2s ease;
+}
+
+.back-top:hover {
+    color: var(--brown-text);
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 700px) {
+    #top h1 { font-size: 48px; }
+    #gallery { grid-template-columns: repeat(2, 1fr); }
+    #game-cards { grid-template-columns: 1fr; }
+    .game-card.featured { grid-column: span 1; }
+    .section-title { font-size: 36px; }
+}
